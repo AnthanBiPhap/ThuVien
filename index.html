@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1 style="font-size: 30px;">Library Management System</h1>
+        <div id="connect-wallet">
+            <button id="connect-button" class="connect-button">Connect Wallet</button>
+            <p id="connection-status" class="hidden">Connected to MetaMask</p>
+            <p id="connection-error" class="hidden"></p>
+        </div>
+        <div id="main-content" class="hidden">
+            <div class="button-group">
+                <button id="add-book-button" style="font-size: 15px;">Add Book</button>
+                <button id="add-borrower-button" style="font-size: 15px;">Borrow Book</button>
+                <button id="return-book-button" style="font-size: 15px;">Return Book</button>
+            </div>
+            <div id="book-list">
+                <h2 style="color: rgb(95, 87, 253);">Book List</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Genre</th>
+                            <th>Publisher</th>
+                            <th>Year</th>
+                            <th>Available</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="book-list-body"></tbody>
+                </table>
+            </div>
+            <div id="book_pagination" class="pagination"></div>
+
+            <div id="borrower-list">
+                <h2 style="color: rgb(95, 87, 253);">Borrow Records</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Borrower Name</th>
+                            <th>Borrow Date</th>
+                            <th>Book ID</th>
+                            <th>Return Date</th>
+                            <th>Returned Book ID</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="borrower-list-body"></tbody>
+                </table>
+            </div>
+            <div id="borrow_pagination" class="pagination"></div>
+        </div>
+        
+        
+        <div id="add-book-form" class="modal hidden">
+            <div class="modal-content" style="margin-top: 200px; " >
+                <h3 style="color: rgb(95, 87, 253);">Add New Book</h3>
+                <form id="book-form">
+                    <input type="text" id="book-title" placeholder="Title" required>
+                    <input type="text" id="book-author" placeholder="Author" required>
+                    <input type="text" id="book-genre" placeholder="Genre" required>
+                    <input type="text" id="book-publisher" placeholder="Publisher" required>
+                    <input type="number" id="book-year" placeholder="Publication Year" required>
+                    <select id="book-isAvailable" required style="height: 35px;">
+                        <option value="yes">Available</option>
+                        <option value="no">Not Available</option>
+                    </select>
+                    <div class="button-group">
+                        <button type="button" class="cancel-button">Cancel</button>
+                        <button type="submit">Add Book</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="edit-book-form" class="modal hidden">
+            <div class="modal-content">
+                <h3 style="color: rgb(95, 87, 253);">Edit Book</h3>
+                <form id="edit-book-form">
+                    <input type="hidden" id="edit-book-id">
+                    <input type="text" id="edit-book-title" placeholder="Title" required>
+                    <input type="text" id="edit-book-author" placeholder="Author" required>
+                    <input type="text" id="edit-book-genre" placeholder="Genre" required>
+                    <input type="text" id="edit-book-publisher" placeholder="Publisher" required>
+                    <input type="number" id="edit-book-year" placeholder="Publication Year" required>
+                    <select id="edit-book-isAvailable" required style="height: 35px;">
+                        <option value="yes">Available</option>
+                        <option value="no">Not Available</option>
+                    </select>
+                    <div class="button-group">
+                        <button type="button" class="cancel-button">Cancel</button>
+                        <button type="submit">Update Book</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="add-borrower-form" class="modal hidden">
+            <div class="modal-content">
+                <h3>Borrow Book</h3>
+                <form id="borrower-form">
+                    <input type="text" id="borrower-name" placeholder="Borrower Name" required>
+                    <input type="number" id="book-id" placeholder="Book ID" required>
+                    <div class="button-group">
+                        <button type="button" class="cancel-button">Cancel</button>
+                        <button type="submit">Borrow Book</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="edit-borrow-form" class="modal hidden">
+            <div class="modal-content">
+                <h3>Edit Borrow Record</h3>
+                <form id="edit-borrow-form">
+                    <input type="hidden" id="edit-borrow-id">
+                    <input type="text" id="edit-borrower-name" placeholder="Borrower Name" required>
+                    <input type="number" id="edit-book-id" placeholder="Book ID" required>
+                    <input type="date" id="edit-borrow-date" required>
+                    
+                </form>
+            </div>
+        </div>
+        <div id="return-book-form" class="modal hidden">
+            <div class="modal-content">
+                <h3>Return Book</h3>
+                <form id="return-form">
+                    <input type="number" id="return-borrow-id" placeholder="Borrow ID" required>
+                    <input type="number" id="return-book-id" placeholder="Book ID" required>
+                    <div class="button-group">
+                        <button type="button" class="cancel-button">Cancel</button>
+                        <button type="submit">Return Book</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="borrower-details-modal" class="modal hidden">
+            <div class="modal-content" style="margin-top: 140px;">
+                <div id="borrower-details-content"></div>
+                <div class="button-group">
+                    <button onclick="hideModals()" class="cancel-button">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.6.9/dist/ethers.umd.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+
